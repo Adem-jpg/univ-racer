@@ -36,6 +36,8 @@ int main()
                     case SDLK_ESCAPE:
                     case SDLK_q:
                         gaming = 0; break;
+                    default:
+                        break;
                 }
             }
         }
