@@ -1,10 +1,21 @@
 #include <SDL2/SDL.h>
+#include <time.h>
 
 int main()
 {
     SDL_Window* window; // Déclaration de la fenêtre
     SDL_Renderer* renderer; // Déclaration du rendu
     SDL_Event event; // Événements
+    SDL_Surface* s;
+    SDL_Texture* t;
+
+
+ 
+
+    int x = 800;
+    int y = 350;
+    int vitesse = 15;
+    float angle = 0;
 
     int gaming = 1;
 
@@ -22,8 +33,21 @@ int main()
         return EXIT_FAILURE;
     }
 
+    s = SDL_LoadBMP("V.bmp");
+    if(s==NULL){
+        printf("Erreur dans SDL_LoadBMP: %s\n",SDL_GetError());
+        SDL_Quit();
+        return EXIT_FAILURE;
+    }
+    t = SDL_CreateTextureFromSurface(renderer,s);
+    if(t==NULL){
+        printf("Erreur dans SDL_CreateTextureFromSurface: %s\n",SDL_GetError());
+        SDL_Quit();
+        return EXIT_FAILURE;
+    }
+
     // Fond de la fenetre en noir
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    // SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     // Boucle principale
     while( gaming ){
         while( SDL_PollEvent( &event ) ){
@@ -41,8 +65,16 @@ int main()
                 }
             }
         }
+        //debut 
+        
+
+
         // actualisation de l'affichage
         SDL_RenderClear(renderer);
+
+        SDL_Rect rectv = {x,y,25,40};
+        SDL_RenderCopy(renderer,t, NULL, &rectv);
+
         SDL_RenderPresent(renderer);
     }
 
