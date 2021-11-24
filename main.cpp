@@ -12,10 +12,14 @@ int main()
 
  
 
-    int x = 800;
-    int y = 350;
-    int vitesse = 15;
-    float angle = 0;
+    double x = 800;
+    double y = 350;
+    double vitesse = 1;
+
+    double vitesseX = 0;
+    double vitesseY = 0;
+
+    double angle = 7;
 
     int gaming = 1;
 
@@ -66,14 +70,31 @@ int main()
             }
         }
         //debut 
+
+
+        if(angle == 0){
+            y -= 1;
+        } else if(angle > 0 && angle < 90){
+            // angle: 90 | 45 | 37
+            // %:    100 |    |
+            // vitesseY = vitesse * (angle / (int)90);
+            // vitesseX = 1 - vitesse * ( angle / (int)90);
+            y -= 1. - vitesse * (angle / 90.);
+            x += vitesse * ( angle / 90.);
+            // printf("vitesse en x:%i, vitesse en y:%i\n",vitesseX,vitesseY);
+        } else if(angle == 90){
+            x += 1;
+        }
+
+        
         
 
 
         // actualisation de l'affichage
         SDL_RenderClear(renderer);
 
-        SDL_Rect rectv = {x,y,25,40};
-        SDL_RenderCopy(renderer,t, NULL, &rectv);
+        SDL_Rect rectv = {(int)x,(int)y,25,40};
+        SDL_RenderCopyEx(renderer,t, NULL, &rectv,angle, NULL, SDL_FLIP_NONE);
 
         SDL_RenderPresent(renderer);
     }
