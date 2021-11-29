@@ -3,7 +3,8 @@ CFLAGS	=	-W	-Wall	-ansi	-std=c++11	-g
 LIBS	=
 LDFLAGS	= `sdl2-config --cflags --libs`
 EXEC	=	main
-SRC	=	main.cpp
+INCLUDES=  vehicule.hpp
+SRC	=	main.cpp vehicule.cpp
 OBJ	=	$(SRC:.cpp=.o)
 
 all:	$(EXEC)

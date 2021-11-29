@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <time.h>
+#include "vehicule.hpp"
 
 int main()
 {
@@ -8,18 +9,6 @@ int main()
     SDL_Event event; // Événements
     SDL_Surface* s;
     SDL_Texture* t;
-
-
- 
-
-    double x = 800;
-    double y = 350;
-    double vitesse = 1;
-
-    double vitesseX = 0;
-    double vitesseY = 0;
-
-    double angle = 7;
 
     int gaming = 1;
 
@@ -50,10 +39,13 @@ int main()
         return EXIT_FAILURE;
     }
 
+    Vehicule v = Vehicule();
+
     // Fond de la fenetre en noir
     // SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     // Boucle principale
     while( gaming ){
+        //events
         while( SDL_PollEvent( &event ) ){
             switch(event.type){
                 case SDL_QUIT:
@@ -61,40 +53,37 @@ int main()
                 case SDL_KEYDOWN:
                 switch(event.key.keysym.sym)
                 {
+                    case SDLK_w:
+                        v.forward();
+                        break;
+                    case SDLK_s:
+                        //fonction stop temporaire
+                        v.stop();
+                        break;
+                    case SDLK_a:
+                        v.left();
+                        break;
+                    case SDLK_d:
+                        v.right();
+                        break;
                     case SDLK_ESCAPE:
-                    case SDLK_q:
                         gaming = 0; break;
                     default:
                         break;
                 }
             }
         }
-        //debut 
+        //update data
+        v.deplacer();
 
-
-        if(angle == 0){
-            y -= 1;
-        } else if(angle > 0 && angle < 90){
-            // angle: 90 | 45 | 37
-            // %:    100 |    |
-            // vitesseY = vitesse * (angle / (int)90);
-            // vitesseX = 1 - vitesse * ( angle / (int)90);
-            y -= 1. - vitesse * (angle / 90.);
-            x += vitesse * ( angle / 90.);
-            // printf("vitesse en x:%i, vitesse en y:%i\n",vitesseX,vitesseY);
-        } else if(angle == 90){
-            x += 1;
-        }
-
-        
         
 
 
         // actualisation de l'affichage
         SDL_RenderClear(renderer);
 
-        SDL_Rect rectv = {(int)x,(int)y,25,40};
-        SDL_RenderCopyEx(renderer,t, NULL, &rectv,angle, NULL, SDL_FLIP_NONE);
+        SDL_Rect rectv = {(int)v.getX(),(int)v.getY(),25,40};
+        SDL_RenderCopyEx(renderer,t, NULL, &rectv,v.getAngle(), NULL, SDL_FLIP_NONE);
 
         SDL_RenderPresent(renderer);
     }

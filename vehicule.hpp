@@ -15,7 +15,15 @@ private:
     double angle;
 public:
     Vehicule();
-    double deplacer();
+    void deplacer();
+    void forward();
+    void backward();
+    void left();
+    void right();
+    double getX();
+    double getY();
+    double getAngle();
+    void stop();
 };
 
 
