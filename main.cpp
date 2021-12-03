@@ -1,5 +1,5 @@
 #include <SDL2/SDL.h>
-#include <time.h>
+#include <sys/time.h>
 #include "vehicule.hpp"
 
 int main()
@@ -41,6 +41,13 @@ int main()
 
     Vehicule v = Vehicule();
 
+    int fpscount = 0;
+    struct timeval ti;
+    struct timeval tbuffer;
+    gettimeofday(&ti,NULL);
+    gettimeofday(&tbuffer,NULL);
+
+
     // Fond de la fenetre en noir
     // SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     // Boucle principale
@@ -75,9 +82,9 @@ int main()
         }
         //update data
         v.deplacer();
-
-        
-
+        gettimeofday(&ti,NULL);
+        // DEBUG
+        // printf("ti     :%lf\ntbuffer:%lf\n",(double)ti.tv_sec,(double)tbuffer.tv_sec);
 
         // actualisation de l'affichage
         SDL_RenderClear(renderer);
@@ -86,6 +93,13 @@ int main()
         SDL_RenderCopyEx(renderer,t, NULL, &rectv,v.getAngle(), NULL, SDL_FLIP_NONE);
 
         SDL_RenderPresent(renderer);
+
+        if( ((double)ti.tv_sec) > ((double)tbuffer.tv_sec) ){
+            printf("FPS: %d\n",fpscount);
+            gettimeofday(&tbuffer,NULL);
+            fpscount = 0;
+        }
+        fpscount++;
     }
 
     // Quitter SDL
