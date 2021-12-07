@@ -41,11 +41,17 @@ int main()
 
     Vehicule v = Vehicule();
 
+    int loopcount = 0;
     int fpscount = 0;
+    int updatespeed = 0;
     struct timeval ti;
     struct timeval tbuffer;
+    struct timeval tlimiter;
+    struct timeval tdatalimiter;
     gettimeofday(&ti,NULL);
     gettimeofday(&tbuffer,NULL);
+    gettimeofday(&tlimiter,NULL);
+    gettimeofday(&tdatalimiter,NULL);
 
 
     // Fond de la fenetre en noir
@@ -80,26 +86,43 @@ int main()
                 }
             }
         }
-        //update data
-        v.deplacer();
+        // printf("%lf\n",(double)ti.tv_sec*1000 + (double)ti.tv_usec/1000);
+        if( (double)ti.tv_sec*1000 + (double)ti.tv_usec/1000 > ( (double)tdatalimiter.tv_sec*1000 + (double)tdatalimiter.tv_usec/1000 ) + 1 ){
+
+            v.deplacer();
+            updatespeed++;
+            gettimeofday(&tdatalimiter,NULL);
+
+        }
         gettimeofday(&ti,NULL);
-        // DEBUG
-        // printf("ti     :%lf\ntbuffer:%lf\n",(double)ti.tv_sec,(double)tbuffer.tv_sec);
+
+        //update data
+
+        //limitation a 60 fps
+        if( (double)ti.tv_sec*1000. + (double)ti.tv_usec/1000. > ( (double)tlimiter.tv_sec*1000. + (double)tlimiter.tv_usec/1000. ) + 1000./60. ){
 
         // actualisation de l'affichage
-        SDL_RenderClear(renderer);
+            SDL_RenderClear(renderer);
 
-        SDL_Rect rectv = {(int)v.getX(),(int)v.getY(),25,40};
-        SDL_RenderCopyEx(renderer,t, NULL, &rectv,v.getAngle(), NULL, SDL_FLIP_NONE);
+            SDL_Rect rectv = {(int)v.getX(),(int)v.getY(),25,40};
+            SDL_RenderCopyEx(renderer,t, NULL, &rectv,v.getAngle(), NULL, SDL_FLIP_NONE);
 
-        SDL_RenderPresent(renderer);
+            SDL_RenderPresent(renderer);
+
+            gettimeofday(&tlimiter,NULL);
+            fpscount++;
+        }
 
         if( ((double)ti.tv_sec) > ((double)tbuffer.tv_sec) ){
             printf("FPS: %d\n",fpscount);
+            printf("loops/s: %d\n",loopcount);
+            printf("updates/s: %d\n",updatespeed);
             gettimeofday(&tbuffer,NULL);
             fpscount = 0;
+            loopcount = 0;
+            updatespeed = 0;
         }
-        fpscount++;
+        loopcount ++;
     }
 
     // Quitter SDL
