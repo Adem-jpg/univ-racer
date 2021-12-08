@@ -20,7 +20,7 @@ int main()
     }
 
     // Creation de la fenêtre et du rendu
-    if (SDL_CreateWindowAndRenderer(1600, 900, SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_FOCUS, &window, &renderer)){
+    if (SDL_CreateWindowAndRenderer(900, 900, SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_FOCUS, &window, &renderer)){
         printf("Erreur de la creation d’une window: %s\n",SDL_GetError());
         SDL_Quit();
         return EXIT_FAILURE;
@@ -74,19 +74,31 @@ int main()
                         v.stop();
                         break;
                     case SDLK_a:
-                        v.left();
+                        v.turnLeft();
                         break;
                     case SDLK_d:
-                        v.right();
+                        v.turnRight();
                         break;
                     case SDLK_ESCAPE:
                         gaming = 0; break;
                     default:
                         break;
                 }
+                case SDL_KEYUP:
+                switch(event.key.keysym.sym){
+                    case SDLK_a:
+                        v.stopLeft();
+                        break;
+                    case SDLK_d:
+                        v.stopRight();
+                        break;
+                }
+
+
             }
         }
-        // printf("%lf\n",(double)ti.tv_sec*1000 + (double)ti.tv_usec/1000);
+
+
         if( (double)ti.tv_sec*1000 + (double)ti.tv_usec/1000 > ( (double)tdatalimiter.tv_sec*1000 + (double)tdatalimiter.tv_usec/1000 ) + 1 ){
 
             v.deplacer();
@@ -112,7 +124,7 @@ int main()
             gettimeofday(&tlimiter,NULL);
             fpscount++;
         }
-
+        
         if( ((double)ti.tv_sec) > ((double)tbuffer.tv_sec) ){
             printf("FPS: %d\n",fpscount);
             printf("loops/s: %d\n",loopcount);

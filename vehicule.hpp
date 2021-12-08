@@ -10,13 +10,18 @@ private:
     double vitesseX;
     double vitesseY;
     double angle;
+    double angleSpeed; // a modifier en fonction de la vitesse
+    int leftTurn;
+    int rightTurn;
 public:
     Vehicule();
     void deplacer();
     void forward();
     void backward();
-    void left();
-    void right();
+    void turnLeft();
+    void turnRight();
+    void stopLeft();
+    void stopRight();
     double getX();
     double getY();
     double getAngle();

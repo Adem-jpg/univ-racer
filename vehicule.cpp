@@ -7,9 +7,28 @@ Vehicule::Vehicule(){
     vitesseY = 0;
     vitesseX = 0;
     angle = 90;
+    angleSpeed = 10;
+    rightTurn = 0;
+    leftTurn = 0;
 }
 
 void Vehicule::deplacer(){
+    if(leftTurn){
+        angle -= angleSpeed;
+    }
+    if(angle == 0){
+        angle = 360;
+    }
+
+    if(rightTurn){
+        angle += angleSpeed;
+    }
+
+    if(angle == 360){
+        angle = 0;
+    }
+
+
     if(angle == 0){
         y -= vitesse;
     } else if(angle > 0 && angle < 90){
@@ -65,20 +84,20 @@ double Vehicule::getY(){
     return y;
 }
 
-void Vehicule::left(){
-    if(angle == 0){
-        angle = 360;
-    } else {
-        angle--;
-    }
+void Vehicule::turnLeft(){
+    leftTurn = 1;
 }
 
-void Vehicule::right(){
-    if(angle == 360){
-        angle = 0;
-    } else {
-        angle++;
-    }
+void Vehicule::turnRight(){
+    rightTurn = 1;
+}
+
+void Vehicule::stopLeft(){
+    leftTurn = 0;
+}
+
+void Vehicule::stopRight(){
+    rightTurn = 0;
 }
 
 double Vehicule::getAngle(){
