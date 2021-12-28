@@ -1,6 +1,8 @@
 #ifndef VEHICULE_HPP
 #define VEHICULE_HPP
 
+#define VEHICULE_SPEED 1
+
 class Vehicule
 {
 private:
@@ -13,19 +15,18 @@ private:
     double angleSpeed; // a modifier en fonction de la vitesse
     int leftTurn;
     int rightTurn;
+    int forward;
 public:
     Vehicule();
     void deplacer();
-    void forward();
+    void setForward(int f);
     void backward();
-    void turnLeft();
-    void turnRight();
-    void stopLeft();
-    void stopRight();
+    void setLeftTurn(int isTurning);
+    void setRightTurn(int isTurning);
     double getX();
     double getY();
     double getAngle();
-    void stop();
+    // void stop();
 };
 
 

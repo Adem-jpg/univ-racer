@@ -1,4 +1,5 @@
 #include "vehicule.hpp"
+#include <stdio.h>
 
 Vehicule::Vehicule(){
     x = 800;
@@ -7,29 +8,29 @@ Vehicule::Vehicule(){
     vitesseY = 0;
     vitesseX = 0;
     angle = 90;
-    angleSpeed = 10;
+    angleSpeed = 0.5;
     rightTurn = 0;
     leftTurn = 0;
 }
 
 void Vehicule::deplacer(){
-    if(leftTurn){
+    // printf("Left:%i, Right:%i\n",leftTurn,rightTurn);
+
+    if(leftTurn == 1){
         angle -= angleSpeed;
     }
-    if(angle == 0){
-        angle = 360;
-    }
-
     if(rightTurn){
         angle += angleSpeed;
     }
-
-    if(angle == 360){
+    if(angle < 0){
+        angle = 360;
+    }
+    if(angle > 360){
         angle = 0;
     }
 
 
-    if(angle == 0){
+    if(angle == 0 || angle == 360){
         y -= vitesse;
     } else if(angle > 0 && angle < 90){
         // angle: 90 | 45 | 37 | 0
@@ -68,8 +69,8 @@ void Vehicule::deplacer(){
     }
 }
 
-void Vehicule::forward(){
-    vitesse = 1;
+void Vehicule::setForward(int f){
+    vitesse = VEHICULE_SPEED * f;
 }
 
 void Vehicule::backward(){
@@ -84,26 +85,14 @@ double Vehicule::getY(){
     return y;
 }
 
-void Vehicule::turnLeft(){
-    leftTurn = 1;
+void Vehicule::setLeftTurn(int isTurning){
+    leftTurn = isTurning;
 }
 
-void Vehicule::turnRight(){
-    rightTurn = 1;
-}
-
-void Vehicule::stopLeft(){
-    leftTurn = 0;
-}
-
-void Vehicule::stopRight(){
-    rightTurn = 0;
+void Vehicule::setRightTurn(int isTurning){
+    rightTurn = isTurning;
 }
 
 double Vehicule::getAngle(){
     return angle;
-}
-
-void Vehicule::stop(){
-    vitesse = 0;
 }

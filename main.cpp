@@ -67,37 +67,41 @@ int main()
                 switch(event.key.keysym.sym)
                 {
                     case SDLK_w:
-                        v.forward();
+                        v.setForward(1);
                         break;
                     case SDLK_s:
-                        //fonction stop temporaire
-                        v.stop();
+                        v.setForward(-1);
                         break;
                     case SDLK_a:
-                        v.turnLeft();
+                        v.setLeftTurn(1);
                         break;
                     case SDLK_d:
-                        v.turnRight();
+                        v.setRightTurn(1);
                         break;
                     case SDLK_ESCAPE:
                         gaming = 0; break;
                     default:
                         break;
                 }
+                break;
                 case SDL_KEYUP:
                 switch(event.key.keysym.sym){
                     case SDLK_a:
-                        v.stopLeft();
+                        v.setLeftTurn(0);
+
                         break;
                     case SDLK_d:
-                        v.stopRight();
+                        v.setRightTurn(0);
+                        break;
+                    case SDLK_w:
+                    case SDLK_s:
+                        v.setForward(0);
                         break;
                 }
-
+                break;
 
             }
         }
-
 
         if( (double)ti.tv_sec*1000 + (double)ti.tv_usec/1000 > ( (double)tdatalimiter.tv_sec*1000 + (double)tdatalimiter.tv_usec/1000 ) + 1 ){
 
