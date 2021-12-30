@@ -2,8 +2,8 @@
 #include <stdio.h>
 
 Vehicule::Vehicule(){
-    x = 800;
-    y = 350;
+    x = 100;
+    y = 100;
     vitesse = 0;
     vitesseY = 0;
     vitesseX = 0;

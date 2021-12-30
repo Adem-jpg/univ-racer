@@ -2,13 +2,51 @@
 #include <sys/time.h>
 #include "vehicule.hpp"
 
-int main()
+#define DISPLAY_WIDTH 800
+#define DISPLAY_HEIGHT 800
+
+
+int main(int ac, char ** av)
 {
+    FILE* fichier = fopen(av[1],"r");
+
+    int map[DISPLAY_WIDTH/10][DISPLAY_HEIGHT/10] = {'r'};
+
+    if(fichier == NULL){
+        printf("Erreur dans la lecture de fichier");
+    }
+
+
+    int xFile = 0;
+    int yFile = 0;
+    int tempC;
+
+    //generation de la map depuis un fichier
+    for(int y = 0; y < DISPLAY_HEIGHT/10; y++){
+        for(int x = 0; x < DISPLAY_WIDTH/10; x++){
+            map[x][y] = fgetc(fichier);
+            if(map[x][y] == '\n'){
+                map[x][y] = fgetc(fichier);
+            }
+        }
+    }
+
+    fclose(fichier);
+
+    //debug pour afficher la map entiere dans le terminal
+    // for(int y = 0; y < DISPLAY_HEIGHT/10; y++){
+    //     for(int x = 0; x < DISPLAY_WIDTH/10; x++){
+    //         printf("%c",map[x][y]);
+    //     }
+    //     printf("\n");
+    // }
+
     SDL_Window* window; // Déclaration de la fenêtre
     SDL_Renderer* renderer; // Déclaration du rendu
     SDL_Event event; // Événements
     SDL_Surface* s;
     SDL_Texture* t;
+    SDL_Texture* tGrass;
 
     int gaming = 1;
 
@@ -20,12 +58,13 @@ int main()
     }
 
     // Creation de la fenêtre et du rendu
-    if (SDL_CreateWindowAndRenderer(900, 900, SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_FOCUS, &window, &renderer)){
+    if (SDL_CreateWindowAndRenderer(800, 800, SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_FOCUS, &window, &renderer)){
         printf("Erreur de la creation d’une window: %s\n",SDL_GetError());
         SDL_Quit();
         return EXIT_FAILURE;
     }
 
+    //chargement de la texture du vehicule
     s = SDL_LoadBMP("V.bmp");
     if(s==NULL){
         printf("Erreur dans SDL_LoadBMP: %s\n",SDL_GetError());
@@ -35,6 +74,20 @@ int main()
     t = SDL_CreateTextureFromSurface(renderer,s);
     if(t==NULL){
         printf("Erreur dans SDL_CreateTextureFromSurface: %s\n",SDL_GetError());
+        SDL_Quit();
+        return EXIT_FAILURE;
+    }
+
+    // chargement d'une texture d'herbe
+    s = SDL_LoadBMP("grass.bmp");
+    if(s==NULL){
+        printf("Erreur dans SDL_LoadBMP(grass.bmp): %s\n",SDL_GetError());
+        SDL_Quit();
+        return EXIT_FAILURE;
+    }
+    tGrass = SDL_CreateTextureFromSurface(renderer,s);
+    if(t==NULL){
+        printf("Erreur dans SDL_CreateTextureFromSurface(grass.bmp): %s\n",SDL_GetError());
         SDL_Quit();
         return EXIT_FAILURE;
     }
@@ -55,7 +108,8 @@ int main()
 
 
     // Fond de la fenetre en noir
-    // SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+
     // Boucle principale
     while( gaming ){
         //events
@@ -103,7 +157,7 @@ int main()
             }
         }
 
-        if( (double)ti.tv_sec*1000 + (double)ti.tv_usec/1000 > ( (double)tdatalimiter.tv_sec*1000 + (double)tdatalimiter.tv_usec/1000 ) + 1 ){
+        if( (double)ti.tv_sec*1000 + (double)ti.tv_usec/1000 > ( (double)tdatalimiter.tv_sec*1000 + (double)tdatalimiter.tv_usec/1000 ) + 1000./500. ){
 
             v.deplacer();
             updatespeed++;
@@ -120,11 +174,25 @@ int main()
         // actualisation de l'affichage
             SDL_RenderClear(renderer);
 
+            //rendu du sol
+            for(int y = 0; y < DISPLAY_HEIGHT/10; y++){
+                for(int x = 0; x < DISPLAY_WIDTH/10; x++){
+                    if(map[x][y] == 'g'){
+                        SDL_Rect rectGrass = {x*10,y*10,10,10};
+                        SDL_RenderCopy(renderer,tGrass,NULL,&rectGrass);
+                    }
+                }
+            }
+
+            //rendu du vehicule
             SDL_Rect rectv = {(int)v.getX(),(int)v.getY(),25,40};
             SDL_RenderCopyEx(renderer,t, NULL, &rectv,v.getAngle(), NULL, SDL_FLIP_NONE);
+            
 
+            //rendu a l'ecran
             SDL_RenderPresent(renderer);
 
+            //timer d'fps
             gettimeofday(&tlimiter,NULL);
             fpscount++;
         }
