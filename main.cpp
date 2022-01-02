@@ -163,6 +163,7 @@ int main(int ac, char ** av)
             }
         }
 
+        //update data
         if( (double)ti.tv_sec*1000 + (double)ti.tv_usec/1000 > ( (double)tdatalimiter.tv_sec*1000 + (double)tdatalimiter.tv_usec/1000 ) + 10. ){
             // garder en memoire la derniere position
             previousX = v.getX();
@@ -174,13 +175,18 @@ int main(int ac, char ** av)
                 v.setX(previousX);
                 v.setY(previousY);
             }
+            //offset de 3 et 4 pour la largeur/longueure de la voiture (a modifier avec des getWidth etc)
+            if(map[((int)v.getX()/10)+3][((int)v.getY()/10)+4]=='g'){
+                v.setX(previousX);
+                v.setY(previousY); 
+            }
+
             updatespeed++;
             gettimeofday(&tdatalimiter,NULL);
 
         }
         gettimeofday(&ti,NULL);
 
-        //update data
 
         //limitation a 60 fps
         if( (double)ti.tv_sec*1000. + (double)ti.tv_usec/1000. > ( (double)tlimiter.tv_sec*1000. + (double)tlimiter.tv_usec/1000. ) + 1000./60. ){
