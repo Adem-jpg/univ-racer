@@ -8,7 +8,7 @@ Vehicule::Vehicule(){
     vitesseY = 0;
     vitesseX = 0;
     angle = 90;
-    angleSpeed = 0.5;
+    angleSpeed = ANGLE_SPEED;
     rightTurn = 0;
     leftTurn = 0;
 }
@@ -16,7 +16,7 @@ Vehicule::Vehicule(){
 void Vehicule::deplacer(){
     // printf("Left:%i, Right:%i\n",leftTurn,rightTurn);
 
-    if(leftTurn == 1){
+    if(leftTurn){
         angle -= angleSpeed;
     }
     if(rightTurn){

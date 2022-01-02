@@ -121,10 +121,10 @@ int main(int ac, char ** av)
                 switch(event.key.keysym.sym)
                 {
                     case SDLK_w:
-                        v.setForward(1);
+                        v.setForward(VEHICULE_SPEED);
                         break;
                     case SDLK_s:
-                        v.setForward(-1);
+                        v.setForward(-VEHICULE_SPEED);
                         break;
                     case SDLK_a:
                         v.setLeftTurn(1);
@@ -157,7 +157,7 @@ int main(int ac, char ** av)
             }
         }
 
-        if( (double)ti.tv_sec*1000 + (double)ti.tv_usec/1000 > ( (double)tdatalimiter.tv_sec*1000 + (double)tdatalimiter.tv_usec/1000 ) + 1000./500. ){
+        if( (double)ti.tv_sec*1000 + (double)ti.tv_usec/1000 > ( (double)tdatalimiter.tv_sec*1000 + (double)tdatalimiter.tv_usec/1000 ) + 10. ){
 
             v.deplacer();
             updatespeed++;

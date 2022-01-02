@@ -1,6 +1,9 @@
 #ifndef VEHICULE_HPP
 #define VEHICULE_HPP
 
+#define VEHICULE_SPEED 2
+#define ANGLE_SPEED 3
+
 class Vehicule
 {
 private:
