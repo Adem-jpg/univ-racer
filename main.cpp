@@ -49,6 +49,8 @@ int main(int ac, char ** av)
     SDL_Texture* tGrass;
 
     int gaming = 1;
+    double previousX = 0;
+    double previousY = 0;
 
     // Initialisation de SDL
     if(SDL_Init(SDL_INIT_VIDEO) < 0){
@@ -158,8 +160,14 @@ int main(int ac, char ** av)
         }
 
         if( (double)ti.tv_sec*1000 + (double)ti.tv_usec/1000 > ( (double)tdatalimiter.tv_sec*1000 + (double)tdatalimiter.tv_usec/1000 ) + 10. ){
+            previousX = v.getX();
+            previousY = v.getY();
 
             v.deplacer();
+            if(map[(int)v.getX()/10][(int)v.getY()/10]=='g'){
+                v.setX(previousX);
+                v.setY(previousY);
+            }
             updatespeed++;
             gettimeofday(&tdatalimiter,NULL);
 

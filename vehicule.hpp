@@ -27,7 +27,8 @@ public:
     double getX();
     double getY();
     double getAngle();
-    // void stop();
+    void setX(double newX);
+    void setY(double newY);
 };
 
 

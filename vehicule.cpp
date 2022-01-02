@@ -96,3 +96,11 @@ void Vehicule::setRightTurn(int isTurning){
 double Vehicule::getAngle(){
     return angle;
 }
+
+void Vehicule::setX(double newX){
+    x = newX;
+}
+
+void Vehicule::setY(double newY){
+    y = newY;
+}
