@@ -8,10 +8,13 @@
 
 int main(int ac, char ** av)
 {
+    //ouverture du fichier
     FILE* fichier = fopen(av[1],"r");
 
+    //creation de la map
     int map[DISPLAY_WIDTH/10][DISPLAY_HEIGHT/10] = {'r'};
 
+    // detection d'erreur de lecture
     if(fichier == NULL){
         printf("Erreur dans la lecture de fichier");
     }
@@ -31,6 +34,7 @@ int main(int ac, char ** av)
         }
     }
 
+    //fermeture du fichier a la fin du chargement de la map 
     fclose(fichier);
 
     //debug pour afficher la map entiere dans le terminal
@@ -160,11 +164,13 @@ int main(int ac, char ** av)
         }
 
         if( (double)ti.tv_sec*1000 + (double)ti.tv_usec/1000 > ( (double)tdatalimiter.tv_sec*1000 + (double)tdatalimiter.tv_usec/1000 ) + 10. ){
+            // garder en memoire la derniere position
             previousX = v.getX();
             previousY = v.getY();
 
             v.deplacer();
             if(map[(int)v.getX()/10][(int)v.getY()/10]=='g'){
+                // appliquer la derniere position si le vehicule est dans de l'herbe
                 v.setX(previousX);
                 v.setY(previousY);
             }
